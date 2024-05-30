@@ -20,5 +20,6 @@ func Physics_Update(_delta):
 		return
 	if Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"):
 		Transitioned.emit(self, "Running")
-	if Input.is_action_just_pressed("move_up"):
+	if Input.is_action_just_pressed("move_up") && player.is_on_floor():
+		player.velocity.y = player.JUMP_VELOCITY
 		Transitioned.emit(self, "jump")

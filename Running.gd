@@ -22,7 +22,8 @@ func Physics_Update(delta):
 			- Input.get_action_strength("move_left")
 		)
 	player.velocity.x = player.SPEED * input_direction_x
-	if Input.is_action_just_pressed("move_up"):
+	if Input.is_action_just_pressed("move_up") && player.is_on_floor():
+		player.velocity.y = player.JUMP_VELOCITY
 		Transitioned.emit(self, "jump")
 	if player.velocity == Vector2.ZERO:
 		Transitioned.emit(self, "idle")
