@@ -11,6 +11,44 @@
 [ext_resource type="Texture2D" uid="uid://cud6dtygybteq" path="res://cross_hair.png" id="9_qcd20"]
 [ext_resource type="Texture2D" uid="uid://by8ds44egh4xa" path="res://fire_direction.png" id="10_aiecu"]
 
+[sub_resource type="Animation" id="Animation_mwqiw"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../StateMachine/Jump/FireRotation/FireDirection:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_76uvs"]
+resource_name = "fire_direction"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../StateMachine/Jump/FireRotation/FireDirection:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mja4q"]
+_data = {
+"RESET": SubResource("Animation_mwqiw"),
+"fire_direction": SubResource("Animation_76uvs")
+}
+
 [sub_resource type="Animation" id="Animation_3byli"]
 length = 0.001
 tracks/0/type = "value"
@@ -111,44 +149,6 @@ height = 12.0
 radius = 4.0
 height = 12.0
 
-[sub_resource type="Animation" id="Animation_76uvs"]
-resource_name = "fire_direction"
-length = 0.5
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FireDirection:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3, 4]
-}
-
-[sub_resource type="Animation" id="Animation_mwqiw"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("FireDirection:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_mja4q"]
-_data = {
-"RESET": SubResource("Animation_mwqiw"),
-"fire_direction": SubResource("Animation_76uvs")
-}
-
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("character_sprite", "animation_player") groups=["player"]]
 script = ExtResource("1_he8uu")
 character_sprite = NodePath("Sprite2D")
@@ -159,24 +159,38 @@ texture = ExtResource("2_3sy3d")
 hframes = 6
 vframes = 3
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="StateMachine" type="Node2D" parent="." node_paths=PackedStringArray("initial_state")]
 script = ExtResource("3_gp6p1")
 initial_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+[node name="Idle" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("4_rtvir")
 player = NodePath("../..")
 
-[node name="Running" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+[node name="Running" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("5_d3w17")
 player = NodePath("../..")
 
-[node name="Jump" type="Node" parent="StateMachine" node_paths=PackedStringArray("player")]
+[node name="Jump" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("6_pgbya")
 player = NodePath("../..")
 
 [node name="FireJumpTimer" type="Timer" parent="StateMachine/Jump"]
 one_shot = true
+
+[node name="FireRotation" type="Node2D" parent="StateMachine/Jump"]
+
+[node name="FireDirection" type="Sprite2D" parent="StateMachine/Jump/FireRotation"]
+position = Vector2(5, 0)
+texture = ExtResource("10_aiecu")
+hframes = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="StateMachine/Jump/FireRotation"]
+root_node = NodePath("../../../../FireManager/FirePoint")
+libraries = {
+"": SubResource("AnimationLibrary_mja4q")
+}
+autoplay = "fire_direction"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -186,7 +200,7 @@ libraries = {
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_1idp6")
 
-[node name="State" type="Node" parent="."]
+[node name="State" type="Node2D" parent="."]
 script = ExtResource("3_rh1s2")
 
 [node name="Hurtbox" type="Area2D" parent="."]
@@ -204,16 +218,5 @@ position = Vector2(7, 0)
 position = Vector2(10, 0)
 texture = ExtResource("9_qcd20")
 
-[node name="FireDirection" type="Sprite2D" parent="FireManager/FirePoint"]
-visible = false
-position = Vector2(-2, 0)
-texture = ExtResource("10_aiecu")
-hframes = 5
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="FireManager/FirePoint"]
-libraries = {
-"": SubResource("AnimationLibrary_mja4q")
-}
-autoplay = "fire_direction"
-
+[connection signal="timeout" from="StateMachine/Jump/FireJumpTimer" to="StateMachine/Jump" method="_on_fire_jump_timer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]

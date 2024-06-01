@@ -159,6 +159,7 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="UIMap" parent="Player/Camera2D/PlayerUI/CanvasLayer/Control" index="0" node_paths=PackedStringArray("level")]
+visible = false
 level = NodePath("../../../../../../TileMap")
 
 [node name="ColorRect" parent="Player/Camera2D/PlayerUI/CanvasLayer/Control/UIMap" index="0" node_paths=PackedStringArray("player", "map")]

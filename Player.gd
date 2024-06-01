@@ -22,7 +22,10 @@ func _physics_process(delta):
 	move_and_slide()
 
 
+
 func _on_hurtbox_area_entered(area):
 	if area.is_in_group("enemy_hitbox"):
 		current_hp -= area.damage
 		emit_signal("hp_changed", -area.damage)
+
+
