@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3sx0otgio7hb"]
+
+[ext_resource type="Texture2D" uid="uid://bwjofrep5icdd" path="res://white_small.png" id="1_s7x2b"]
+
+[sub_resource type="Curve" id="Curve_vftlh"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.501854), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="Trail" type="CPUParticles2D"]
+emitting = false
+amount = 12
+lifetime = 0.7
+texture = ExtResource("1_s7x2b")
+gravity = Vector2(0, 16)
+scale_amount_curve = SubResource("Curve_vftlh")
+color = Color(1, 0.635294, 0.0784314, 1)

@@ -3,8 +3,8 @@ extends CharacterBody2D
 @export var base_hp = 100
 var current_hp = base_hp
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+const SPEED = 250.0
+const JUMP_VELOCITY = -300.0
 signal hp_changed(amount)
 
 @export var character_sprite : Sprite2D
@@ -17,7 +17,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _physics_process(delta):
 	if velocity.x < 0: 
 		character_sprite.flip_h = true
-	else:
+	if velocity.x > 0:
 		character_sprite.flip_h = false
 	move_and_slide()
 

@@ -1,7 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://c4b24aldwt5xl"]
+[gd_scene load_steps=24 format=3 uid="uid://c4b24aldwt5xl"]
 
 [ext_resource type="Script" path="res://Player.gd" id="1_he8uu"]
 [ext_resource type="Texture2D" uid="uid://n2by8pohn4vi" path="res://pumpkin_idle_spritesheet.png" id="2_3sy3d"]
+[ext_resource type="PackedScene" uid="uid://cp3bmlmq4rw33" path="res://trail.tscn" id="2_jai2k"]
+[ext_resource type="PackedScene" uid="uid://d3sx0otgio7hb" path="res://small_trail.tscn" id="3_1i3es"]
 [ext_resource type="Script" path="res://StateMachine.gd" id="3_gp6p1"]
 [ext_resource type="Script" path="res://State.gd" id="3_rh1s2"]
 [ext_resource type="Script" path="res://Idle.gd" id="4_rtvir"]
@@ -154,6 +156,10 @@ script = ExtResource("1_he8uu")
 character_sprite = NodePath("Sprite2D")
 animation_player = NodePath("AnimationPlayer")
 
+[node name="Trail" parent="." instance=ExtResource("2_jai2k")]
+
+[node name="Trail2" parent="." instance=ExtResource("3_1i3es")]
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_3sy3d")
 hframes = 6
@@ -171,11 +177,16 @@ player = NodePath("../..")
 script = ExtResource("5_d3w17")
 player = NodePath("../..")
 
+[node name="CoyoteTimer" type="Timer" parent="StateMachine/Running"]
+wait_time = 0.125
+one_shot = true
+
 [node name="Jump" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("player")]
 script = ExtResource("6_pgbya")
 player = NodePath("../..")
 
 [node name="FireJumpTimer" type="Timer" parent="StateMachine/Jump"]
+wait_time = 0.3
 one_shot = true
 
 [node name="FireRotation" type="Node2D" parent="StateMachine/Jump"]
@@ -218,5 +229,6 @@ position = Vector2(7, 0)
 position = Vector2(10, 0)
 texture = ExtResource("9_qcd20")
 
+[connection signal="timeout" from="StateMachine/Running/CoyoteTimer" to="StateMachine/Running" method="_on_coyote_timer_timeout"]
 [connection signal="timeout" from="StateMachine/Jump/FireJumpTimer" to="StateMachine/Jump" method="_on_fire_jump_timer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
