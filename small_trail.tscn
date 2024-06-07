@@ -8,8 +8,7 @@ point_count = 2
 
 [node name="Trail" type="CPUParticles2D"]
 emitting = false
-amount = 12
-lifetime = 0.7
+lifetime = 0.6
 texture = ExtResource("1_s7x2b")
 gravity = Vector2(0, 16)
 scale_amount_curve = SubResource("Curve_vftlh")
