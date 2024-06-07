@@ -203,4 +203,7 @@ level = NodePath("../../../../../../TileMap")
 player = NodePath("../../../../../..")
 map = NodePath("../../../../../../../TileMap")
 
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.537255, 0.537255, 0.537255, 1)
+
 [editable path="Player/Camera2D/PlayerUI"]

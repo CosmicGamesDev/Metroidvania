@@ -4,6 +4,8 @@ class_name PlayerJump
 @onready var fire_jump_timer = $FireJumpTimer
 @onready var fire_direction = $FireRotation/FireDirection
 @onready var fire_rotation = $FireRotation
+@onready var trail = $"../../Trail"
+@onready var trail_2 = $"../../Trail2"
 
 @export var player : CharacterBody2D
 @export var move_speed := 10.0
@@ -19,7 +21,10 @@ func Exit():
 	can_fire_jump = true
 	fire_direction.visible = false
 	fire_jump_timer.stop()
-	fire_jump_timer.wait_time = 1
+	fire_jump_timer.wait_time = .3
+	Engine.set_time_scale(1)
+	trail.emitting = false
+	trail_2.emitting = false
 
 func Update(_delta):
 	pass
@@ -61,26 +66,33 @@ func double_jump():
 func fire_stall(delta):
 	if Input.is_action_just_pressed("move_up") and !can_double_jump and fire_jump_timer.is_stopped() and can_fire_jump:
 		var input_direction = Input.get_vector("jump_fire_left","jump_fire_right","jump_fire_up","jump_fire_down")
-		player.velocity = player.SPEED/4 * input_direction
+		Engine.set_time_scale(0.3)
+		player.velocity = player.SPEED/3 * input_direction
 		fire_jump_timer.start()
 		fire_direction.visible = true
 
 func fire_dash():
 	if Input.is_action_just_pressed("move_up") and !fire_jump_timer.is_stopped() and can_fire_jump:
 		can_fire_jump = false
+		Engine.set_time_scale(1)
 		player.animation_player.play("double_jump")
 		var input_direction = Input.get_vector("jump_fire_left","jump_fire_right","jump_fire_up","jump_fire_down")
 		player.velocity= player.SPEED * 2 * input_direction
 		fire_direction.visible = false
 		fire_jump_timer.stop()
-		fire_jump_timer.wait_time = 1
+		fire_jump_timer.wait_time = .3
+		trail.emitting = true
+		trail_2.emitting = true
 
 
 func _on_fire_jump_timer_timeout():
 	can_fire_jump = false
 	player.animation_player.play("double_jump")
+	Engine.set_time_scale(1)
 	var input_direction = Input.get_vector("jump_fire_left","jump_fire_right","jump_fire_up","jump_fire_down")
 	player.velocity= player.SPEED * 2 * input_direction
 	fire_direction.visible = false
 	fire_jump_timer.stop()
-	fire_jump_timer.wait_time = 1
+	fire_jump_timer.wait_time = .3
+	trail.emitting = true
+	trail_2.emitting = true
