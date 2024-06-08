@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bawf2uh3v2ems"]
+
+[ext_resource type="Texture2D" uid="uid://c2f8gbwuw36oh" path="res://fire_pit.png" id="1_jssng"]
+[ext_resource type="PackedScene" path="res://trail.tscn" id="1_va4f2"]
+[ext_resource type="PackedScene" path="res://small_trail.tscn" id="2_qia42"]
+
+[node name="FirePit" type="Sprite2D"]
+texture = ExtResource("1_jssng")
+
+[node name="Big" parent="." instance=ExtResource("1_va4f2")]
+show_behind_parent = true
+position = Vector2(0, -2)
+emitting = true
+gravity = Vector2(0, -16)
+
+[node name="Small" parent="." instance=ExtResource("2_qia42")]
+show_behind_parent = true
+position = Vector2(0, -2)
+emitting = true
+gravity = Vector2(0, -16)
